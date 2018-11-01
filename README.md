@@ -33,6 +33,8 @@ I was using a Python EDI library and it works fine to create an object with no s
 
 This library is much easier and worth the price for a profesional implementation.
 
+![alt text](https://github.com/061375/EDIFabric-Implementation-Test/blob/master/EDI.Fabric/Files/Page1.png "Flow 1")
 
+![alt text](https://github.com/061375/EDIFabric-Implementation-Test/blob/master/EDI.Fabric/Files/Page2.png "Flow 2")
 
 
