@@ -9,7 +9,9 @@ The final product (if it ever goes to production ) will not look anything like t
 
 This is just a proof of concept.
 
-### Arguments [-flag value -flag value ... ... ]
+### Arguments 
+
+[[-flag] [value] [-flag] [value] ... ... ]
 
 * -d [void] debug
 * -c [string] The class ( EDI Template type ) to use
