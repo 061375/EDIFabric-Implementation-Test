@@ -2,10 +2,9 @@
 
 https://www.edifabric.com/
 
-Simple use of the EDIFabric class. I am not a C# programmer as of yet (15+ years OOP in other languages) but, I needed it for this task and I am finding it to be a great langauge.
-NOTE: I did take a C# course on Lynda.com about a year ago, so it's not like I just started coding in it out of the blue.
+Simple use of the EDIFabric class. 
 
-The final product (if it ever goes to production ) will not look anything like this.
+The final product (if it ever goes to production ) will probably not look anything like this.
 
 This is just a proof of concept.
 
