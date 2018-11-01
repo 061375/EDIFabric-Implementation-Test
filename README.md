@@ -9,13 +9,13 @@ The final product (if it ever goes to production ) will not look anything like t
 
 This is just a proof of concept.
 
-### Arguments
+### Arguments [-flag value -flag value ... ... ]
 
-* -d debug
-* -c The class ( EDI Template type ) to use
-* -p The "Ship To" company
-* -f The name and extension of the file: blah.edi
-* -s The status Send, Receive, Respond
+* -d [void] debug
+* -c [string] The class ( EDI Template type ) to use
+* -p [string] The "Ship To" company
+* -f [string] The name and extension of the file: blah.edi
+* -s [string] The status Send, Receive, Respond
 
 ### Sub Classing
 
