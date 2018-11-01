@@ -67,6 +67,12 @@ namespace EDI.Fabric.Libraries.Readers.Types
                 while (ediReader.Read())
                 {
                     var items = ediReader.Item as TS810;
+                    switch (portID)
+                    {
+                        case "Acme":
+                            items = ediReader.Item as TS810acme;
+                            break;
+                    }
                     ExtractPO1(items);
                     ExtractN1(items);
                     ExtractBEG(items);
@@ -122,14 +128,17 @@ namespace EDI.Fabric.Libraries.Readers.Types
          * */
         private static void ExtractN1fields()
         {
+            // The 4 shipping address sections in the database
             string[] prefix = new string[4];
             prefix[0] = "Shipto";
             prefix[1] = "Shipto2";
             prefix[2] = "Shipfrom";
             prefix[3] = "Shipfrom2";
+
             int inx = 0;
             foreach (var item in N1Loops)
             {
+                // if this exceeds 4 then it will be handled by a sub class
                 if (inx < 3)
                 {
                     if (null != item.N1)

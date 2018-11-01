@@ -228,6 +228,9 @@ namespace EDI.Fabric.Libraries.Readers.Types
                 BEG.Add("AT", items.BEG.AcknowledgmentType_07);
             }
         }
+        /*
+         * @param TS850 * overload * 
+         * * */
         private static void ExtractBEG(TS850acme items)
         {
             if (items != null)

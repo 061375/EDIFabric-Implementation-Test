@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace EDI.Fabric.Libraries.Writers.Types
 {
@@ -50,6 +51,8 @@ namespace EDI.Fabric.Libraries.Writers.Types
 
             var result = new TS850();
 
+            int iLength = 0;
+            double dAmt = 0;
             foreach (var d in data)
             {
                 if (firstRow == true)
@@ -94,9 +97,26 @@ namespace EDI.Fabric.Libraries.Writers.Types
                     n4.PostalCode_03 = d.Value["ShiptoZip"];
                     n1Loop.N4.Add(n4);
 
-                    result.N1Loop.Add(n1Loop);
-                }    
-            }
+                    result.N1Loop.Add(n1Loop); 
+                } // End First Row Loop
+
+                iLength++;
+                dAmt += (float.Parse(d.Value["ItemPrice"],CultureInfo.InvariantCulture) * int.Parse(d.Value["ItemQty"]));
+
+            } // End data loop
+
+            //  Begin CTT Loop   
+            result.CTTLoop = new Loop_CTT_850();
+
+            //  Indicates that the purchase order contains 1 line item.
+            result.CTTLoop.CTT = new CTT();
+            result.CTTLoop.CTT.NumberofLineItems_01 = iLength.ToString();
+
+            //  Indicates that the total amount of the purchase order is $900.
+            result.CTTLoop.AMT = new AMT();
+            result.CTTLoop.AMT.AmountQualifierCode_01 = "";
+            result.CTTLoop.AMT.MonetaryAmount_02 = Math.Round(dAmt,2).ToString();
+            // End CT Loop
 
             return result;
         }
