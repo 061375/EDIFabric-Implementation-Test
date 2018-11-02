@@ -50,6 +50,10 @@ namespace EDI.Fabric.Libraries.Writers.Types
             bool firstRow = true;
 
             var result = new TS850();
+            result.PO1Loop = new List<Loop_PO1_850>();
+            var PO1loop = new Loop_PO1_850();
+
+            
 
             int iLength = 0;
             double dAmt = 0;
@@ -97,9 +101,36 @@ namespace EDI.Fabric.Libraries.Writers.Types
                     n4.PostalCode_03 = d.Value["ShiptoZip"];
                     n1Loop.N4.Add(n4);
 
-                    result.N1Loop.Add(n1Loop); 
+                    result.N1Loop.Add(n1Loop);
+
+                    
                 } // End First Row Loop
 
+                // Begin Looped Content
+                //  Indicates Baseline item 1 is a request to purchase 25 units, with a price of $36.00 each, of manufacturer's part number XYZ-1234.
+                PO1loop.PO1 = new PO1();
+                PO1loop.PO1.AssignedIdentification_01 = d.Value["ItemSQ"]; // Ask
+                PO1loop.PO1.QuantityOrdered_02 = d.Value["ItemQty"];
+                PO1loop.PO1.UnitorBasisforMeasurementCode_03 = d.Value["ItemUnit"];
+                PO1loop.PO1.UnitPrice_04 = float.Parse(d.Value["ItemPrice"], CultureInfo.InvariantCulture).ToString();
+                PO1loop.PO1.BasisofUnitPriceCode_05 = "PE"; // Ask
+                PO1loop.PO1.ProductServiceIDQualifier_06 = d.Value["ItemIQ2"]; // Ask
+                PO1loop.PO1.ProductServiceID_07 = d.Value["ItemID2"];
+                
+                // Followed the template
+                // This will get easier te more I read them
+                PO1loop.PIDLoop = new List<Loop_PID_850>();
+                    var loopPID = new Loop_PID_850();
+                        loopPID.PID = new PID();
+                            loopPID.PID.ItemDescriptionType_01 = ""; // ironically enough after all this there is no data fields that correspond
+                            loopPID.PID.Description_05 = ""; // But it helps me learn
+                PO1loop.PIDLoop.Add(loopPID);
+                
+
+                // Moved the ADD PO1loop HERE
+                result.PO1Loop.Add(PO1loop);
+
+                // Begin Incrementing Data
                 iLength++;
                 dAmt += (float.Parse(d.Value["ItemPrice"],CultureInfo.InvariantCulture) * int.Parse(d.Value["ItemQty"]));
 
@@ -116,6 +147,8 @@ namespace EDI.Fabric.Libraries.Writers.Types
             result.CTTLoop.AMT = new AMT();
             result.CTTLoop.AMT.AmountQualifierCode_01 = "";
             result.CTTLoop.AMT.MonetaryAmount_02 = Math.Round(dAmt,2).ToString();
+
+
             // End CT Loop
 
             return result;

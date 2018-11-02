@@ -37,11 +37,26 @@ namespace EDI.Fabric
 
         public static readonly string pathToFiles = ConfigurationManager.AppSettings["filePath"];
 
+        public static string pathToFile = "";
+
         static void Main(string[] args)
         {
-            Console.WriteLine(currentDBconn);
+            
+            
+
             // get the flags from cmd
             GetArgs(args);
+
+            if(debug)
+            {
+                Console.WriteLine("currentDBconn " + currentDBconn);
+                Console.WriteLine("theStatus " + theStatus);
+                Console.WriteLine("theFile " + theFile);
+                Console.WriteLine("thePortID " + thePortID);
+            }
+
+            pathToFile = pathToFiles + theStatus + "/" + theFile;
+
             switch (theStatus)
             {
                 case "Receive":

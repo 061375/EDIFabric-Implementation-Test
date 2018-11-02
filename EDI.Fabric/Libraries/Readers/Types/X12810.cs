@@ -49,7 +49,7 @@ namespace EDI.Fabric.Libraries.Readers.Types
         {
             portID = _portID;
             pTheFile = theFile;
-            ediStream = getFile(status+"/"+theFile);
+            ediStream = getFile();
 
             switch(status)
             {
@@ -256,9 +256,9 @@ namespace EDI.Fabric.Libraries.Readers.Types
          * 
          * 
          * */
-        private FileStream getFile(string theFile)
+        private FileStream getFile()
         {
-            return File.OpenRead(Program.pathToFiles + theFile);
+            return File.OpenRead(Program.pathToFile);
         }
 
 
@@ -279,7 +279,7 @@ namespace EDI.Fabric.Libraries.Readers.Types
          * */
         public void GetXML()
         {
-            ediStream = getFile(pTheFile);
+            ediStream = getFile();
             List<IEdiItem> x12Items;
             using (var ediReader = new X12Reader(ediStream, LoadFactory, new X12ReaderSettings() { ContinueOnError = true }))
                 x12Items = ediReader.ReadToEnd().ToList();
