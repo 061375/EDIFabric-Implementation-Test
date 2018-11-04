@@ -9,14 +9,17 @@ namespace EDI.Fabric.Libraries.Data
     class Get
     {
         // @SimpleDB class 
-        private static SimpleDB _db;
+        private static SimpleDB Db;
 
         //private static readonly IEDIextraction _class;
 
         public Get(string conn)
         {
-            _db = new SimpleDB(conn);
+            Db = new SimpleDB(conn);
         }
+        // If I were dealing with thousands of records I might not simply join the tables
+        // and loop all the data but would instead run two queries however,
+        // I don't expect more than 10 or 20 in most cases.
         public Dictionary<int, Dictionary<string, string>> GetTransactions(string portID, string startDate, string endDate)
         {
             //01006097142
@@ -30,7 +33,7 @@ namespace EDI.Fabric.Libraries.Data
                         " AND (dbo.TransMaster.PODATE <= '" + endDate + "') " +
                         " AND (dbo.TransMaster.Status <> 0)";
 
-            return _db.Query(sql);
+            return  Db.Query(sql);
         }
     }
 }
