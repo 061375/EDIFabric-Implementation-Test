@@ -19,7 +19,7 @@ namespace EDI.Fabric.Libraries.Writers.Types
             switch(status)
             {
                 case "Send":
-                    // @todo - pull dates from ... config file maybe ???
+                    // @todo - pull dates from ... config file maybe ??? ... no ... from the arguments
                     BuildEDI(_portID, DateTime.Now.AddDays(-7).ToString("yyyyMMdd"), DateTime.Now.ToString("yyyyMMdd"));
                     break;
                 case "Respond":
@@ -32,6 +32,8 @@ namespace EDI.Fabric.Libraries.Writers.Types
 
             // update database
         }
+        // Obviously this was based on my schema and subsequently the BuildEDI method reflects that
+        // Developers will want to modify accordingly
         static void getData(string portID, string startDate, string endDate)
         {
             Libraries.Data.Get g = new Libraries.Data.Get(EDI.Fabric.Program.currentDBconn);
@@ -59,6 +61,9 @@ namespace EDI.Fabric.Libraries.Writers.Types
             double dAmt = 0;
             foreach (var d in data)
             {
+                // If I were dealing with thousands of records I might not simply join the tables
+                // and loop all the data but would instead run two queries however,
+                // I don't expect more than 10 or 20 in most cases.
                 if (firstRow == true)
                 {
                     var test = d;
