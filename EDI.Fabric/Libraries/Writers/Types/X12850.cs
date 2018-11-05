@@ -16,7 +16,7 @@ namespace EDI.Fabric.Libraries.Writers.Types
         public X12850(string theFile, string _portID = null, string status = "Send")
         {
             // create EDI
-            switch(status)
+            switch (status)
             {
                 case "Send":
                     // @todo - pull dates from ... config file maybe ???
@@ -37,7 +37,8 @@ namespace EDI.Fabric.Libraries.Writers.Types
             Libraries.Data.Get g = new Libraries.Data.Get(EDI.Fabric.Program.currentDBconn);
             data = g.GetTransactions(portID, startDate, endDate);
         }
-        static TS850 BuildEDI(string portID, string startDate, string endDate) {
+        static TS850 BuildEDI(string portID, string startDate, string endDate)
+        {
             // In 99% of the cases this will be about 2kb
             // overall maybe 10 - 20 transactions
             // 
@@ -53,15 +54,17 @@ namespace EDI.Fabric.Libraries.Writers.Types
             result.PO1Loop = new List<Loop_PO1_850>();
             var PO1loop = new Loop_PO1_850();
 
-            
+
 
             int iLength = 0;
             double dAmt = 0;
             foreach (var d in data)
             {
+                // The query joins the transactions and the company infor.
+                // It only needs the CO info once so set thisy
                 if (firstRow == true)
                 {
-                    var test = d;
+
                     result.ST = new ST();
                     result.ST.TransactionSetIdentifierCode_01 = "850";
 
@@ -73,7 +76,7 @@ namespace EDI.Fabric.Libraries.Writers.Types
                     result.BEG.PurchaseOrderTypeCode_02 = "SA";
                     result.BEG.PurchaseOrderNumber_03 = d.Value["POID"];
                     //result.BEG.Date_05 = DateTime.TryParseExact("20181001","yyyyMMdd").ToString(); //DateTime.Now.ToString("yyyyMMdd");
-                   
+
                     //result.BEG.ContractNumber_06 = d.Value["ContractNumber"];
                     firstRow = false;
 
@@ -103,7 +106,7 @@ namespace EDI.Fabric.Libraries.Writers.Types
 
                     result.N1Loop.Add(n1Loop);
 
-                    
+
                 } // End First Row Loop
 
                 // Begin Looped Content
@@ -116,23 +119,23 @@ namespace EDI.Fabric.Libraries.Writers.Types
                 PO1loop.PO1.BasisofUnitPriceCode_05 = "PE"; // Ask
                 PO1loop.PO1.ProductServiceIDQualifier_06 = d.Value["ItemIQ2"]; // Ask
                 PO1loop.PO1.ProductServiceID_07 = d.Value["ItemID2"];
-                
+
                 // Followed the template
                 // This will get easier te more I read them
                 PO1loop.PIDLoop = new List<Loop_PID_850>();
-                    var loopPID = new Loop_PID_850();
-                        loopPID.PID = new PID();
-                            loopPID.PID.ItemDescriptionType_01 = ""; // ironically enough after all this there is no data fields that correspond
-                            loopPID.PID.Description_05 = ""; // But it helps me learn
+                var loopPID = new Loop_PID_850();
+                loopPID.PID = new PID();
+                loopPID.PID.ItemDescriptionType_01 = ""; // ironically enough after all this there is no data fields that correspond
+                loopPID.PID.Description_05 = ""; // But it helps me learn
                 PO1loop.PIDLoop.Add(loopPID);
-                
+
 
                 // Moved the ADD PO1loop HERE
                 result.PO1Loop.Add(PO1loop);
 
                 // Begin Incrementing Data
                 iLength++;
-                dAmt += (float.Parse(d.Value["ItemPrice"],CultureInfo.InvariantCulture) * int.Parse(d.Value["ItemQty"]));
+                dAmt += (float.Parse(d.Value["ItemPrice"], CultureInfo.InvariantCulture) * int.Parse(d.Value["ItemQty"]));
 
             } // End data loop
 
@@ -146,14 +149,15 @@ namespace EDI.Fabric.Libraries.Writers.Types
             //  Indicates that the total amount of the purchase order is $900.
             result.CTTLoop.AMT = new AMT();
             result.CTTLoop.AMT.AmountQualifierCode_01 = "";
-            result.CTTLoop.AMT.MonetaryAmount_02 = Math.Round(dAmt,2).ToString();
+            result.CTTLoop.AMT.MonetaryAmount_02 = Math.Round(dAmt, 2).ToString();
 
 
             // End CT Loop
 
             return result;
         }
-        static TS850 BuildResponse() {
+        static TS850 BuildResponse()
+        {
             var result = new TS850();
 
 
