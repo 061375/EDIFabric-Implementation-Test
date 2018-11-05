@@ -29,8 +29,16 @@ namespace EDI.Fabric
             cmd.Connection = sqlConnection1;
 
             sqlConnection1.Open();
-
-            Dictionary<int, Dictionary<string, string>> _return = new Dictionary<int, Dictionary<string, string>>();
+            /**
+             * something to hang our results on
+             * I don't expect more than a few 100 records per run
+             * A simple query and loop to sort the data should suffice
+             *
+             * data[0] = {{key, value},{key, value}, etc..},
+             * data[1] = {{key, value},{key, value}, etc..}, 
+             * etc...
+             * */
+            Dictionary<int, Dictionary<string, string>> dReturn = new Dictionary<int, Dictionary<string, string>>();
 
             var reader = cmd.ExecuteReader();
             int row = 0;
@@ -45,7 +53,8 @@ namespace EDI.Fabric
                     for (int i = 0; i < count; i++)
                     {
 
-                        Console.WriteLine(row + " " + reader.GetName(i) + " " + reader.GetValue(i));
+                        // Console.WriteLine(row + " " + reader.GetName(i) + " " + reader.GetValue(i)); // debug
+                        
                         if(false == col.ContainsKey(reader.GetName(i).ToString()))
                             col.Add(reader.GetName(i).ToString(), reader.GetValue(i).ToString());
                         /*
@@ -70,14 +79,14 @@ namespace EDI.Fabric
                         }
                         */
                     }
-                    _return.Add(row, col);
+                    dReturn.Add(row, col);
                     row++;
                 }
             } while (reader.NextResult());
 
             sqlConnection1.Close();
 
-            return _return;
+            return dReturn;
         }
     }
 

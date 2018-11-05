@@ -8,6 +8,13 @@ The final product (if it ever goes to production ) will probably not look anythi
 
 This is just a proof of concept.
 
+### EDI ([E]lectronic [D]ata [I]nterchange) 
+
+https://www.up.com/suppliers/order_inv/edi/what_is_edi/
+
+EDI has been around since the 1960's but EDI is still in use today by many major companies. When it's understood it can be compared to a DOM in that it has opening and closing envelopes encapsulating sections of data. The schema for the document is contained in a header of 105 characters and a major delimiter. 
+
+
 ### Arguments 
 
 [[-flag] [value] [-flag] [value] ... ... ]
