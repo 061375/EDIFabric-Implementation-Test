@@ -11,14 +11,14 @@ using System.Linq;
 using System.Reflection;
 /** 
  * 
- * EDI.Fabric X12850 Extract an insert class 1.0.1
+ * EDI.Fabric X12856 Extract an insert class 1.0.1
  * @author Jeremy Heminger <contact@jeremyheminger.com>
  * @version 1.0.x
  * @date October 2018
  **/
 namespace EDI.Fabric.Libraries.Readers.Types
 {
-    class X12850 : IEDIextraction
+    class X12856 : IEDIextraction
     {
         private static string CTT = null;
         private static string AQC = null;
@@ -29,11 +29,11 @@ namespace EDI.Fabric.Libraries.Readers.Types
         private static Dictionary<string, string> BEG = new Dictionary<string, string>();
         private static Dictionary<string, string> N1 = new Dictionary<string, string>();
         private static Dictionary<string, Dictionary<string, string>> POrders = new Dictionary<string, Dictionary<string, string>>();
-        private static List<Loop_PO1_850> po1Loops = new List<Loop_PO1_850>();
-        private static List<Loop_N1_850> N1Loops = new List<Loop_N1_850>();
+        //private static List<Loop_PO1_856> po1Loops = new List<Loop_PO1_856>();
+        private static List<Loop_N1_856> N1Loops = new List<Loop_N1_856>();
 
         // init the interface requirements
-        private static string pTheFile; 
+        private static string pTheFile;
         private static FileStream ediStream = null;
         private static string portID = "";
         public string GetPortID => portID;
@@ -50,6 +50,8 @@ namespace EDI.Fabric.Libraries.Readers.Types
         // Special case ( Sub Classes )
         private static SubClass.Acme Acme = new SubClass.Acme();
         public static string GetAcme = null;
+        //private static SubClass.X12856HDasn HDASN = new SubClass.X12856HDasn();
+        public static string GetHDASN = null;
 
         /** 
          * @param string the title of the file to extract
@@ -57,7 +59,7 @@ namespace EDI.Fabric.Libraries.Readers.Types
          * @param string if not null this is a list of extra directives based on custom EDI
          *          
          * */
-        public X12850(string theFile, string _portID = null, string status = "Receive")
+        public X12856(string theFile, string _portID = null, string status = "Receive")
         {
             // init
             portID = _portID;
@@ -75,16 +77,18 @@ namespace EDI.Fabric.Libraries.Readers.Types
             }
         }
         static void Receive()
-        {
+        {/*
             using (var ediReader = new X12Reader(ediStream, LoadFactory, new X12ReaderSettings() { ContinueOnError = true }))
             {
                 while (ediReader.Read())
                 {
-                    var items = ediReader.Item as TS850;
+                    var items = ediReader.Item as TS856;
                     switch (portID)
                     {
                         case "Acme":
-                            items = ediReader.Item as TS850acme;
+                            //items = ediReader.Item as TS856acme;
+                            break;
+                        case "HomeDepotASN":
                             break;
                     }
                     ExtractPO1(items);
@@ -96,7 +100,7 @@ namespace EDI.Fabric.Libraries.Readers.Types
             }
             ExtractPO1fields();
             ExtractN1fields();
-        }
+        */}
 
         // ----- START READERS
 
@@ -104,11 +108,11 @@ namespace EDI.Fabric.Libraries.Readers.Types
         /**
             * 
             * */
-        private static void ExtractPO1(TS850 items)
+        private static void ExtractPO1(TS856 items)
         {
             if (items != null)
             {
-                po1Loops.AddRange(items.PO1Loop);
+                //po1Loops.AddRange(items.PO1Loop);
             }
         }
 
@@ -116,31 +120,32 @@ namespace EDI.Fabric.Libraries.Readers.Types
          * 
          * */
         private static void ExtractPO1fields()
-        {
+        {/*
             foreach (var item in po1Loops)
             {
                 Dictionary<string, string> row = new Dictionary<string, string>();
 
-                row.Add("Qty",item.PO1.QuantityOrdered_02);
-                row.Add("Unit",item.PO1.UnitorBasisforMeasurementCode_03);
-                row.Add("Price",item.PO1.UnitPrice_04);
-                row.Add("UCode",item.PO1.BasisofUnitPriceCode_05);
-                row.Add("SID",item.PO1.ProductServiceIDQualifier_06);
-                row.Add("PSID",item.PO1.ProductServiceID_07);
-                row.Add("PSIDQ",item.PO1.ProductServiceIDQualifier_08);
-                row.Add("PSID2",item.PO1.ProductServiceID_09);
-                row.Add("PSIDQ2",item.PO1.ProductServiceIDQualifier_10);
-                row.Add("PSID3",item.PO1.ProductServiceID_11);
+                row.Add("Qty", item.PO1.QuantityOrdered_02);
+                row.Add("Unit", item.PO1.UnitorBasisforMeasurementCode_03);
+                row.Add("Price", item.PO1.UnitPrice_04);
+                row.Add("UCode", item.PO1.BasisofUnitPriceCode_05);
+                row.Add("SID", item.PO1.ProductServiceIDQualifier_06);
+                row.Add("PSID", item.PO1.ProductServiceID_07);
+                row.Add("PSIDQ", item.PO1.ProductServiceIDQualifier_08);
+                row.Add("PSID2", item.PO1.ProductServiceID_09);
+                row.Add("PSIDQ2", item.PO1.ProductServiceIDQualifier_10);
+                row.Add("PSID3", item.PO1.ProductServiceID_11);
 
                 POrders.Add(item.PO1.AssignedIdentification_01, row);
 
             }
+            */
         }
 
         /**
          * 
          * */
-        private static void ExtractST(TS850 items)
+        private static void ExtractST(TS856 items)
         {
             if (items != null)
             {
@@ -152,18 +157,18 @@ namespace EDI.Fabric.Libraries.Readers.Types
         /**
          * 
          * */
-        private static void ExtractN1(TS850 items)
+        private static void ExtractN1(TS856 items)
         {
             if (items != null)
             {
-                N1Loops.AddRange(items.N1Loop);
+                //N1Loops.AddRange(items.N1Loop);
             }
         }
         /**
          * 
          * */
         private static void ExtractN1fields()
-        {
+        {/*
             string[] prefix = new string[4];
             prefix[0] = "Shipto";
             prefix[1] = "Shipto2";
@@ -210,14 +215,14 @@ namespace EDI.Fabric.Libraries.Readers.Types
                     }
                 }
                 inx += 1;
-            }
+            }*/
         }
 
         /**
          * 
          * */
-        private static void ExtractBEG(TS850 items)
-        {
+        private static void ExtractBEG(TS856 items)
+        {/*
             if (items != null)
             {
                 BEG.Add("TSPC", items.BEG.TransactionSetPurposeCode_01);
@@ -228,11 +233,11 @@ namespace EDI.Fabric.Libraries.Readers.Types
                 BEG.Add("CN", items.BEG.ContractNumber_06);
                 BEG.Add("AT", items.BEG.AcknowledgmentType_07);
             }
-        }
+        */}
         /*
-         * @param TS850acme * overload * 
-         * * */
-        private static void ExtractBEG(TS850acme items)
+         * @param TS856acme * overload * 
+         * * *
+        private static void ExtractBEG(TS856acme items)
         {
             if (items != null)
             {
@@ -245,13 +250,13 @@ namespace EDI.Fabric.Libraries.Readers.Types
                 BEG.Add("AT", items.BEG.AcknowledgmentType_07);
                 Acme.ExtractBEG(ref items, ref GetAcme);
             }
-                
-        }
+
+        }*/
 
         /**
          * 
-         * */
-        private static void ExtractCTT(TS850 items)
+         * *
+        private static void ExtractCTT(TS856 items)
         {
             if (items != null)
             {
@@ -269,17 +274,17 @@ namespace EDI.Fabric.Libraries.Readers.Types
                     {
                         AQC = items.CTTLoop.AMT.AmountQualifierCode_01 ?? "";
                         CDF = items.CTTLoop.AMT.CreditDebitFlagCode_03 ?? "";
-                        MA  = items.CTTLoop.AMT.MonetaryAmount_02 ?? "0";
+                        MA = items.CTTLoop.AMT.MonetaryAmount_02 ?? "0";
                     }
                     else
                     {
                         AQC = "";
                         CDF = "";
-                        MA  = "0";
+                        MA = "0";
                     }
                 }
             }
-        }
+        }*/
 
         // ----- END READERS
 
@@ -310,7 +315,7 @@ namespace EDI.Fabric.Libraries.Readers.Types
             return File.OpenRead(Program.pathToFile);
         }
 
-        
+
         /**
          * DEBUG PURPOSES
          * 
@@ -330,13 +335,13 @@ namespace EDI.Fabric.Libraries.Readers.Types
             List<IEdiItem> x12Items;
             using (var ediReader = new X12Reader(ediStream, LoadFactory, new X12ReaderSettings() { ContinueOnError = true }))
                 x12Items = ediReader.ReadToEnd().ToList();
-            var x12Transactions = x12Items.OfType<TS850>();
+            var x12Transactions = x12Items.OfType<TS856>();
 
             System.Xml.Linq.XDocument xml = null;
             foreach (var transaction in x12Transactions)
                 xml = transaction.Serialize();
 
-            Console.Write("\n\n"+xml);
+            Console.Write("\n\n" + xml);
         }
     }
 }

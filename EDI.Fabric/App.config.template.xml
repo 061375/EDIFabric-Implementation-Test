@@ -6,5 +6,11 @@
     <appSettings>
       <add key="dbConn" value="" />
       <add key="filePath" value="" />
+      <add key="ShipFromCompanyName" value="TST WATER LLC" />
+      <add key="ShipFromCompanyAddress" value="42188 RIO NEDO" />
+      <add key="ShipFromCompanyCity" value="TEMECULA" />
+      <add key="ShipFromCompanyState" value="CA" />
+      <add key="ShipFromCompanyZip" value="92590" />
+      <add key="ShipFromCompanyCountry" value="US" />
     </appSettings>
 </configuration>

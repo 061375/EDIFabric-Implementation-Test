@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace EDI.Fabric.Libraries.Data
 {
-    class Put
+    class Set
     {
         // @SimpleDB class 
         private static SimpleDB _db;
 
         private static IEDIextraction _class;
 
-        public Put(IEDIextraction __class, string conn)
+        public Set(IEDIextraction __class, string conn)
         {
             _class = __class;
             _db = new SimpleDB(conn);

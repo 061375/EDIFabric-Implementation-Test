@@ -1,28 +1,44 @@
-﻿using System.Data;
-using System.Data.SqlClient;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using EDI.Fabric.Interfaces;
+using Oracle.ManagedDataAccess.Client;
 
-namespace EDI.Fabric
+namespace EDI.Fabric.Libraries.Data
 {
-    class SimpleDB : DbConnection
+    class OracleDB : DbConnection
     {
-        private static SqlConnection sqlConnection1 = null;
+        OracleConnection con;
 
-        public SimpleDB(string conn)
+        public OracleDB(string conn)
         {
-            sqlConnection1 = new SqlConnection(conn);
+            Connect(conn);
+        }
+        void Connect(string conn)
+        {
+            con = new OracleConnection();
+            //con.ConnectionString = "User Id=<username>;Password=<password>;Data Source=<datasource>";
+            con.ConnectionString = conn;
+            //con.Open();
+            Console.WriteLine("Connected to Oracle" + con.ServerVersion);
+        }
+        void Close()
+        {
+            con.Close();
+            con.Dispose();
         }
         public Dictionary<int, Dictionary<string, string>> Query(string sql)
         {
-            
-            SqlCommand cmd = new SqlCommand();
+
+            OracleCommand cmd = new OracleCommand();
 
             cmd.CommandText = sql;
-            cmd.CommandType = CommandType.Text;
-            cmd.Connection = sqlConnection1;
+            cmd.CommandType = System.Data.CommandType.Text;
+            cmd.Connection = con;
 
-            sqlConnection1.Open();
+            con.Open();
             /**
              * something to hang our results on
              * I don't expect more than a few 100 records per run
@@ -36,16 +52,16 @@ namespace EDI.Fabric
 
             var reader = cmd.ExecuteReader();
             int row = 0;
-            
+
             do
-            { 
+            {
                 while (reader.Read())
                 {
                     int count = reader.FieldCount;
                     Dictionary<string, string> col = new Dictionary<string, string>();
                     for (int i = 0; i < count; i++)
                     {
-                        if(false == col.ContainsKey(reader.GetName(i).ToString()))
+                        if (false == col.ContainsKey(reader.GetName(i).ToString()))
                             col.Add(reader.GetName(i).ToString(), reader.GetValue(i).ToString());
                     }
                     dReturn.Add(row, col);
@@ -53,23 +69,9 @@ namespace EDI.Fabric
                 }
             } while (reader.NextResult());
 
-            sqlConnection1.Close();
+            Close();
 
             return dReturn;
         }
-        public Dictionary<string, string> GetFirst(string sql)
-        {
-            Dictionary<int, Dictionary<string, string>> firstResult = Query(sql);
-            foreach(var r in firstResult)
-            {
-                return new Dictionary<string, string>(r.Value);
-            }
-            return new Dictionary<string, string>();
-        }
-    }
-
-    internal class Return
-    {
-
     }
 }
