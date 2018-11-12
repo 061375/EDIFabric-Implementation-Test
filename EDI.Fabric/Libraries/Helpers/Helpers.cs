@@ -13,23 +13,44 @@ namespace EDI.Fabric.Libraries.Helpers
         /// Build ISA.
         /// 
         public static ISA BuildIsa(string controlNumber,
-           string senderId = "SENDER1",
-           string senderQ = "14",
-           string receiverId = "RECEIVER1",
-           string receiverQ = "16",
+           string senderId = null,
+           string senderQ = null,
+           string receiverId = null,
+           string receiverQ = null,
+           string icvn = null,
            string ackRequested = "1",
            string testIndicator = "T")
         {
+            if(null == senderId)
+            {
+                senderId = Program.CustomerConfig["InterchangeSID"];
+            }
+            if(null == senderQ)
+            {
+                senderQ = Program.CustomerConfig["InterchangeSIDQ"];
+            }
+            if (null == receiverQ)
+            {
+                receiverId = Program.CustomerConfig["InterchangeRIDQ"];
+            }
+            if (null == receiverId)
+            {
+                receiverId = Program.CustomerConfig["InterchangeRID"];
+            }
+            if (null == icvn)
+            {
+                receiverId = "00401";
+            }
             return new ISA
             {
                 //  Authorization Information Qualifier
-                AuthorizationInformationQualifier_1 = "00",
+                AuthorizationInformationQualifier_1 = Program.CustomerConfig["AuthIQ"],
                 //  Authorization Information
-                AuthorizationInformation_2 = "".PadRight(10),
+                AuthorizationInformation_2 = Program.CustomerConfig["AuthI"].PadRight(10),
                 //  Security Information Qualifier
-                SecurityInformationQualifier_3 = "00",
+                SecurityInformationQualifier_3 = Program.CustomerConfig["SecIQ"],
                 //  Security Information
-                SecurityInformation_4 = "".PadRight(10),
+                SecurityInformation_4 = Program.CustomerConfig["SECI"].PadRight(10),
                 //  Interchange ID Qualifier
                 SenderIDQualifier_5 = senderQ,
                 //  Interchange Sender
@@ -43,10 +64,10 @@ namespace EDI.Fabric.Libraries.Helpers
                 //  Time
                 InterchangeTime_10 = DateTime.Now.TimeOfDay.ToString("hhmm"),
                 //  Standard identifier
-                InterchangeControlStandardsIdentifier_11 = "U",
+                InterchangeControlStandardsIdentifier_11 = Program.CustomerConfig["RepSep"],
                 //  Interchange Version ID
                 //  This is the ISA version and not the transaction sets versions
-                InterchangeControlVersionNumber_12 = "00204",
+                InterchangeControlVersionNumber_12 = icvn,
                 //  Interchange Control Number
                 InterchangeControlNumber_13 = controlNumber.PadLeft(9, '0'),
                 //  Acknowledgment Requested (0 or 1)
@@ -59,13 +80,26 @@ namespace EDI.Fabric.Libraries.Helpers
         /// Build GS.
         /// 
         public static GS BuildGs(string controlNumber,
-           string senderId = "SENDER1",
-           string receiverId = "RECEIVER1")
+           string ciit = null,
+           string senderId = null,
+           string receiverId = null)
         {
+            if (null == ciit)
+            {
+                ciit = "ST";
+            }
+            if (null == senderId)
+            {
+                senderId = Program.CustomerConfig["InterchangeSID"];
+            }
+            if (null == receiverId)
+            {
+                receiverId = Program.CustomerConfig["InterchangeRID"];
+            }
             return new GS
             {
                 //  Functional ID Code
-                CodeIdentifyingInformationType_1 = "IN",
+                CodeIdentifyingInformationType_1 = ciit,
                 //  Application Senders Code
                 SenderIDCode_2 = senderId,
                 //  Application Receivers Code

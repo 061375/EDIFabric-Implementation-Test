@@ -35,15 +35,9 @@ namespace EDI.Fabric.Libraries.Data.Customer
         {
             Data = Getdata.GetTransaction(PortID, PONUM, EDIType);
         }
-
-
-        static void GetConfig()
+        static Dictionary<string, string> GetICN(string PortID)
         {
-            //Getdata.GetConfigMain();
-        }
-        static Dictionary<int, Dictionary<string, string>> GetICN(string PortID)
-        {
-            Dictionary<int, Dictionary<string, string>> d = Getdata.GetMCN(PortID);
+            Dictionary<string, string> d = Getdata.GetMCN(PortID);
             // check if MCN has value
             // if true increment the value by 1
             // update this new value in the database
