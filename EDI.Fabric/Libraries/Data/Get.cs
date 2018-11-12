@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EDI.Fabric.Libraries.Data
 {
-    class Get
+    class Get : IDisposable
     {
         // @SimpleDB class 
         private static SimpleDB Db;
@@ -17,14 +17,16 @@ namespace EDI.Fabric.Libraries.Data
         {
             Db = new SimpleDB(conn);
         }
-        public Dictionary<int, Dictionary<string, string>> GetConfigMain(string PortID = null)
+        public Dictionary<int, Dictionary<string, string>> GetConfigMain()
         {
             string sql = "SELECT * FROM ConfigMain";
-            if (null != PortID)
-            {
-                sql += " WHERE PortID = '" + PortID + "'";
-            }
             return Db.Query(sql);
+        }
+        // override 
+        public Dictionary<string, string> GetConfigMain(string PortID = null)
+        {
+            string sql = "SELECT * FROM ConfigMain WHERE PortID = '" + PortID + "'";
+            return Db.GetFirst(sql);
         }
         public Dictionary<int, Dictionary<string, string>> GetConfig(string cType, string PortID = null)
         {
@@ -74,10 +76,10 @@ namespace EDI.Fabric.Libraries.Data
             return Db.Query(sql);
         }
         //
-        public Dictionary<int, Dictionary<string, string>> GetMCN(string PortID)
+        public Dictionary<string, string> GetMCN(string PortID)
         {
             string sql = "SELECT MCN FROM ConfigMain WHERE (PortID = '" + PortID + "')";
-            return Db.Query(sql);
+            return Db.GetFirst(sql);
         }
         //
         public Dictionary<string, string> GetASN(string PortID, string ASN)
@@ -159,6 +161,11 @@ namespace EDI.Fabric.Libraries.Data
             {
                 return "05";
             }
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }

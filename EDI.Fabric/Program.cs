@@ -19,6 +19,7 @@ namespace EDI.Fabric
 
     class Program
     {
+        public static Dictionary<string, string> CustomerConfig = null;
 
         private static bool debug = false;
 
@@ -58,16 +59,10 @@ namespace EDI.Fabric
 
             // get the flags from cmd
             GetArgs(args);
-
-            if(debug)
-            {
-                Console.WriteLine("currentDBconn " + currentDBconn);
-                Console.WriteLine("theStatus " + theStatus);
-                Console.WriteLine("theFile " + theFile);
-                Console.WriteLine("thePortID " + thePortID);
-                Console.WriteLine("theSCCC " + theSSCC);
-                Console.WriteLine("thePO " + thePO);
-            }
+            //
+            // 
+            GetConfigMain();
+            //
 
             pathToFile = pathToFiles + theStatus + "/" + theFile;
 
@@ -100,7 +95,7 @@ namespace EDI.Fabric
                     switch (theClass)
                     {
                         case "850":
-                            Libraries.Writers.Types.X12850 _X12850 = new Libraries.Writers.Types.X12850(thePortID,thePO);
+                            Libraries.Writers.Types.X12850 _X12850 = new Libraries.Writers.Types.X12850(thePortID,thePO, theSSCC);
                             break;
                         case "856":
                             Libraries.Writers.Types.X12856 _X12856 = new Libraries.Writers.Types.X12856(thePortID, thePO, theSSCC);
@@ -164,6 +159,15 @@ namespace EDI.Fabric
                     }
                 }
             }
+            if (debug)
+            {
+                Console.WriteLine("currentDBconn " + currentDBconn);
+                Console.WriteLine("theStatus " + theStatus);
+                Console.WriteLine("theFile " + theFile);
+                Console.WriteLine("thePortID " + thePortID);
+                Console.WriteLine("theSCCC " + theSSCC);
+                Console.WriteLine("thePO " + thePO);
+            }
         }
         /**
          * Adds the gathered and normalized EDI data into the database
@@ -173,6 +177,13 @@ namespace EDI.Fabric
         static void PutData(IEDIextraction _class)
         {
             Libraries.Data.Set p = new Libraries.Data.Set(_class, currentDBconn);
+        }
+        static void GetConfigMain()
+        {
+            using(Libraries.Data.Get get = new Libraries.Data.Get(currentDBconn))
+            {
+                CustomerConfig = get.GetConfigMain(thePortID);
+            }
         }
         static void EchoResponseAndDie(string s)
         {
