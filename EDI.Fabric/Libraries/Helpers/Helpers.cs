@@ -9,6 +9,21 @@ namespace EDI.Fabric.Libraries.Helpers
 {
     class Helpers
     {
+        public static void Log(string[] lines) {
+            using (System.IO.StreamWriter file =
+            new System.IO.StreamWriter(System.IO.Directory.GetCurrentDirectory()+Program.thePortID+"_"+ Program.theClass+"_log.txt"))
+            {
+                file.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss A"));
+
+                foreach (string line in lines)
+                {
+                    file.WriteLine(line);
+                }
+
+                file.WriteLine("--------------------------");
+            }
+        }
+
         /// 
         /// Build ISA.
         /// 

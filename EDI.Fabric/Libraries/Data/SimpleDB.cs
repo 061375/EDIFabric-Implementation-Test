@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using System.Collections.Generic;
 using EDI.Fabric.Interfaces;
+using System;
 
 namespace EDI.Fabric
 {
@@ -15,7 +16,12 @@ namespace EDI.Fabric
         }
         public Dictionary<int, Dictionary<string, string>> Query(string sql)
         {
-            
+            if(Program.debug)
+            {
+                Console.WriteLine("Query:");
+                Console.WriteLine(sql);
+            }
+
             SqlCommand cmd = new SqlCommand();
 
             cmd.CommandText = sql;

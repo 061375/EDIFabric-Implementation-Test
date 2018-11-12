@@ -20,11 +20,19 @@ namespace EDI.Fabric.Libraries.Data.Customer
         }
         public void GetTransaction(string PortID, string PONUM, string EDIType)
         {
+            if(Program.debug)
+            {
+                Console.WriteLine("GetTransaction");
+            }
             Data = Getdata.GetTransaction(PortID, PONUM, EDIType);
         }
         //ASNPurpose
         public string GetASNPurpose(string PortID, string ASNID)
         {
+            if (Program.debug)
+            {
+                Console.WriteLine("GetASNPurpose");
+            }
             return Getdata.GetASNPurpose(PortID, ASNID);
         }
     }

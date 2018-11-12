@@ -1,4 +1,5 @@
-﻿using EdiFabric.Core.Model.Edi;
+﻿using EDI.Fabric.Libraries.Helpers;
+using EdiFabric.Core.Model.Edi;
 using EdiFabric.Framework;
 using EdiFabric.Framework.Readers;
 using EdiFabric.Sdk.Helpers;
@@ -21,13 +22,13 @@ namespace EDI.Fabric
     {
         public static Dictionary<string, string> CustomerConfig = null;
 
-        private static bool debug = false;
+        public static bool debug = false;
 
-        private static string theClass = "";
+        public static string theClass = "";
 
         private static string theFile = "";
 
-        private static string thePortID = "";
+        public static string thePortID = "";
 
         private static string theSSCC = "";
 
@@ -37,7 +38,9 @@ namespace EDI.Fabric
 
         public static readonly string currentDBconn = ConfigurationManager.AppSettings["dbConn"] + "";
 
-        public static readonly string pathToFiles = ConfigurationManager.AppSettings["filePath"];
+        public static string pathToFiles = ConfigurationManager.AppSettings["filePath"];
+
+        static string RawPathToFile = null;
 
         //@todo - make these overideable with a config loaded by argument
         public static readonly string ShipFromCompanyName = ConfigurationManager.AppSettings["ShipFromCompanyName"];
@@ -63,8 +66,6 @@ namespace EDI.Fabric
             // 
             GetConfigMain();
             //
-
-            pathToFile = pathToFiles + theStatus + "/" + theFile;
 
             switch (theStatus)
             {
@@ -139,6 +140,12 @@ namespace EDI.Fabric
                         case "-f":
                             theFile = args[i];
                             break;
+                        case "-pf":
+                            pathToFiles = args[i];
+                            break;
+                        case "-rpf":
+                            RawPathToFile = args[i];
+                            break;
                         case "-s":
                             theStatus = args[i];
                             break;
@@ -146,9 +153,11 @@ namespace EDI.Fabric
                             break;
                         case "-h":
                             string helpmenu = "flag [arg type] \n";
-                            helpmenu += "-d [null] : dumps debug data XML \n";
+                            helpmenu += "-d [null] : dumps debug data and dumps EDI data as XML \n";
                             helpmenu += "-c [string] the edi class to use \b";
                             helpmenu += "-p [string] the port id \n";
+                            helpmenu += "-pf [string] overide default path to files \n";
+                            helpmenu += "-rpf [string] raw path to file example: C:/path/to/file.edi \n";
                             helpmenu += "-sscc [string] the sscc \n";
                             helpmenu += "-f [string] name of the EDI file to target \n";
                             helpmenu += "-s [string] whether the operation is getting or setting data \n";
@@ -159,6 +168,20 @@ namespace EDI.Fabric
                     }
                 }
             }
+
+            // build path to files
+            pathToFile = pathToFiles + theStatus + "/" + theFile;
+
+            // ----- HANDLE DEFAULTS
+
+            // if user wants raw file path
+            if (null != RawPathToFile)
+            {
+                pathToFile = RawPathToFile;
+            }
+
+            // ----- DEBUG
+
             if (debug)
             {
                 Console.WriteLine("currentDBconn " + currentDBconn);
@@ -167,6 +190,23 @@ namespace EDI.Fabric
                 Console.WriteLine("thePortID " + thePortID);
                 Console.WriteLine("theSCCC " + theSSCC);
                 Console.WriteLine("thePO " + thePO);
+                Console.WriteLine("RawPathToFile " + RawPathToFile);
+                Console.WriteLine("pathToFile " + pathToFile);
+            }
+            else
+            {
+                string[] log =
+                {
+                    "currentDBconn " + currentDBconn,
+                    "theStatus " + theStatus,
+                    "theFile " + theFile,
+                    "thePortID " + thePortID,
+                    "theSCCC " + theSSCC,
+                    "thePO " + thePO,
+                    "RawPathToFile " + RawPathToFile,
+                    "pathToFile " + pathToFile
+                };
+                Helpers.Log(log);
             }
         }
         /**

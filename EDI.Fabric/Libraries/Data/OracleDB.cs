@@ -31,6 +31,11 @@ namespace EDI.Fabric.Libraries.Data
         }
         public Dictionary<int, Dictionary<string, string>> Query(string sql)
         {
+            if (Program.debug)
+            {
+                Console.WriteLine("Query:");
+                Console.WriteLine(sql);
+            }
 
             OracleCommand cmd = new OracleCommand();
 
