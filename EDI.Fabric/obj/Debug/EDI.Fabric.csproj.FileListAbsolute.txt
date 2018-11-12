@@ -13,3 +13,4 @@ C:\Users\TST User\source\repos\EDI.Fabric\EDI.Fabric\obj\Debug\EDI.Fabric.csproj
 C:\Users\TST User\source\repos\EDI.Fabric\EDI.Fabric\obj\Debug\EDI.Fabric.exe
 C:\Users\TST User\source\repos\EDI.Fabric\EDI.Fabric\obj\Debug\EDI.Fabric.pdb
 C:\Users\TST User\source\repos\EDI.Fabric\EDI.Fabric\bin\Debug\EDI.Fabric.exe.config
+C:\Users\TST User\source\repos\EDI.Fabric\EDI.Fabric\bin\Debug\Oracle.ManagedDataAccess.dll

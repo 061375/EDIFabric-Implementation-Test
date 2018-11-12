@@ -53,8 +53,6 @@ namespace EDI.Fabric
                 }
             } while (reader.NextResult());
 
-            sqlConnection1.Close();
-
             return dReturn;
         }
         public Dictionary<string, string> GetFirst(string sql)
@@ -65,6 +63,10 @@ namespace EDI.Fabric
                 return new Dictionary<string, string>(r.Value);
             }
             return new Dictionary<string, string>();
+        }
+        public void Close()
+        {
+            sqlConnection1.Close();
         }
     }
 

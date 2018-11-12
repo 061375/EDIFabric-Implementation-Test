@@ -69,8 +69,6 @@ namespace EDI.Fabric.Libraries.Data
                 }
             } while (reader.NextResult());
 
-            Close();
-
             return dReturn;
         }
     }

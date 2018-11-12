@@ -162,10 +162,9 @@ namespace EDI.Fabric.Libraries.Data
                 return "05";
             }
         }
-
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Db.Close();
         }
     }
 }

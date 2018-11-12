@@ -81,6 +81,7 @@
     <Compile Include="Libraries\Data\OleDBconn.cs" />
     <Compile Include="Libraries\Data\Set.cs" />
     <Compile Include="Libraries\Data\SimpleDB.cs" />
+    <Compile Include="Libraries\Data\OracleDB.cs" />
     <Compile Include="Libraries\Readers\Types\SubClass\Acme.cs" />
     <Compile Include="Libraries\Readers\Types\X12810.cs" />
     <Compile Include="Libraries\Readers\Types\X12850.cs" />
