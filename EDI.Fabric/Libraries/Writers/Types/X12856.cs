@@ -139,7 +139,7 @@ namespace EDI.Fabric.Libraries.Writers.Types
             td11.LadingQuantity_02 = Constants.X12856TD102; // TotalCartons --> intTotalBoxes ( need to calc @todo )
             td11.WeightQualifier_06 = Constants.X12856TD106; // IfPallets ???
             td11.Weight_07 = Constants.X12856TD107; // "45582"; //GrossWeight
-            td11.UnitorBasisforMeasurementCode_08 = "LB";
+            td11.UnitorBasisforMeasurementCode_08 = Constants.X12856TD108;
             td11.Volume_09 = Constants.X12856TD109; //
             td11.UnitorBasisforMeasurementCode_10 = Constants.X12856TD110; //
             hlLoop1.TD1.Add(td11);
@@ -159,7 +159,7 @@ namespace EDI.Fabric.Libraries.Writers.Types
             var td51 = new TD5();
             td51.RoutingSequenceCode_01 = Constants.X12856TD501;
             td51.IdentificationCodeQualifier_02 = Constants.X12856TD502;
-            td51.IdentificationCode_03 = "JBHT"; // SCAC @todo
+            td51.IdentificationCode_03 = Constants.X12856TD503; //"JBHT"; // SCAC @todo
             td51.TransportationMethodTypeCode_04 = Constants.X12856TD504;
             hlLoop1.TD5.Add(td51);
         }
@@ -191,7 +191,7 @@ namespace EDI.Fabric.Libraries.Writers.Types
         static void BuildDTM(Dictionary<string, string> d, ref Loop_HL_856 hlLoop1, ref TS856 result)
         {
             var dtm1 = new DTM();
-            dtm1.DateTimeQualifier_01 = "011";
+            dtm1.DateTimeQualifier_01 = Constants.X12856DTM01;
             dtm1.Date_02 = "200";
             hlLoop1.DTM.Add(dtm1);
         }

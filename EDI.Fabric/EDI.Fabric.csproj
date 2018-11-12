@@ -64,11 +64,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Interfaces\DbConnection.cs" />
     <Compile Include="Interfaces\EDIextraction.cs" />
     <Compile Include="Interfaces\GetASNDataInterface.cs" />
     <Compile Include="Libraries\Data\Customer\ACMEASN.cs" />
     <Compile Include="Libraries\Data\Customer\General.cs" />
+    <Compile Include="Libraries\Helpers\Helpers.cs" />
+    <Compile Include="Libraries\OracleDB.cs" />
     <Compile Include="Libraries\Readers\Types\X12856.cs" />
     <Compile Include="Libraries\Writers\Types\SubClass\Acme.cs" />
     <Compile Include="Libraries\Writers\Types\X12856.cs" />
