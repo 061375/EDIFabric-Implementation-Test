@@ -48,6 +48,7 @@ namespace EDI.Fabric.Libraries.Data.Customer
             // if true increment the value by 1
             // update this new value in the database
             // set ICN to the new value
+            return d; // temp
         }
 
     }
