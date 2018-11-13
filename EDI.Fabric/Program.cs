@@ -112,6 +112,8 @@ namespace EDI.Fabric
         }
         static void GetArgs(string[] args)
         {
+            // @TODO - many of these flags should overide settings stored in a db called by the Port ID
+
             string flag = "";
             for(int i=0; i<args.Length; i++)
             {

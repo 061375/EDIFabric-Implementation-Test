@@ -8,7 +8,13 @@ namespace EDI.Fabric
 {
     public static class Constants
     {
-        // ---- X12856
+        // ----- ISA
+
+        // ----- GS
+        public const string X12ISAGS7 = "X";
+        public const string X12ISAGS8 = "004010";
+
+        // ----- X12856
 
         // HL
         public const string X12856HL1 = "1";

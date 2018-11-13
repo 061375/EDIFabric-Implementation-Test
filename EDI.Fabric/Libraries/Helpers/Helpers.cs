@@ -1,6 +1,7 @@
 ﻿using EdiFabric.Core.Model.Edi.X12;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,17 +11,57 @@ namespace EDI.Fabric.Libraries.Helpers
     class Helpers
     {
         public static void Log(string[] lines) {
-            using (System.IO.StreamWriter file =
-            new System.IO.StreamWriter(System.IO.Directory.GetCurrentDirectory()+Program.thePortID+"_"+ Program.theClass+"_log.txt"))
+            // init paths if they don't exists
+            string portid = Program.thePortID;
+            if(null == portid)
             {
-                file.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss A"));
+                portid = "null";
+            }
+            string theclass = Program.theClass;
+            if (null == theclass)
+            {
+                theclass = "null";
+            }
+            // create a log directory
+            string logdir = System.IO.Directory.GetCurrentDirectory() + "/logs";
+            // "
+            System.IO.Directory.CreateDirectory(logdir);
+            // create the path to the log file
+            string logfile = logdir + "/" + portid + "_" + theclass + "_log.txt";
 
-                foreach (string line in lines)
+            // show the path to the log in the console 
+            Console.WriteLine("Attempting to write to: "+logfile);
+
+            // new file create else append
+            if (!File.Exists(logfile))
+            {
+                // Create a file to write to.
+                using (StreamWriter sw = File.CreateText(logfile))
                 {
-                    file.WriteLine(line);
-                }
+                    sw.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss A"));
 
-                file.WriteLine("--------------------------");
+                    foreach (string line in lines)
+                    {
+                        sw.WriteLine(line);
+                    }
+
+                    sw.WriteLine("--------------------------");
+                }
+            }
+            else
+            {
+                // Create a file to write to.
+                using (StreamWriter sw = File.AppendText(logfile))
+                {
+                    sw.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss A"));
+
+                    foreach (string line in lines)
+                    {
+                        sw.WriteLine(line);
+                    }
+
+                    sw.WriteLine("--------------------------");
+                }
             }
         }
 
@@ -127,9 +168,9 @@ namespace EDI.Fabric.Libraries.Helpers
                 //  Must be unique to both partners for this interchange
                 GroupControlNumber_6 = controlNumber.PadLeft(9, '0'),
                 //  Responsible Agency Code
-                TransactionTypeCode_7 = "X",
+                TransactionTypeCode_7 = Constants.X12ISAGS7,
                 //  Version/Release/Industry id code
-                VersionAndRelease_8 = "004010"
+                VersionAndRelease_8 = Constants.X12ISAGS8
             };
         }
     }
